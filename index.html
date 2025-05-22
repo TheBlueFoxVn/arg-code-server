@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Nova Studios - Exodus</title>
+    <link rel="icon" href="https://placehold.co/32x32/1a2036/b36aff?text=PNS" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Blue-purple gradient background for the body */
+            background: linear-gradient(to bottom right, #1a2036, #2e1a36); /* Deep blue to deep purple */
+            background-attachment: scroll; /* Changed to scroll for iframe compatibility */
+            color: #e2e8f0; /* Light text for contrast */
+            min-height: 100vh; /* Ensure body covers full height */
+            position: relative; /* Needed for absolute positioning of header */
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700; /* Bold for headings */
+        }
+        /* Custom scrollbar for a sleeker look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d3748; /* Dark track */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b36aff; /* Vibrant purple for scrollbar thumb */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9f4bff; /* Slightly darker purple on hover */
+        }
+
+        /* Styles for dropdown */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #2d3748; /* Darker background for dropdown */
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+            z-index: 1;
+            border-radius: 0.75rem; /* rounded-xl */
+            overflow: hidden;
+            border: 1px solid #4a5568; /* gray-600 */
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            color: #e2e8f0; /* light text */
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #4a5568; /* gray-600 */
+            color: #6a8eff; /* vibrant blue on hover */
+        }
+
+        /* Carousel specific styles */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 1rem; /* rounded-2xl */
+            border: 4px solid #4c1d95; /* purple-800 */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4); /* shadow-2xl */
+        }
+
+        .carousel-images {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-images img {
+            width: 100%;
+            flex-shrink: 0;
+            object-fit: cover;
+            border-radius: 0.75rem; /* rounded-xl */
+            cursor: pointer; /* Indicate clickable */
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 1rem;
+            border-radius: 9999px; /* rounded-full */
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .carousel-button.left {
+            left: 1rem;
+        }
+
+        .carousel-button.right {
+            right: 1rem;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 100; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px); /* Blur effect */
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain; /* Ensure image fits within bounds */
+            border-radius: 1rem;
+            box-shadow: 0 0 20px rgba(0,0,0,0.7);
+            transition: transform 0.3s ease-out;
+        }
+
+        .modal-content.zoomed {
+            transform: scale(1.05); /* Slight zoom on open */
+        }
+
+        /* Main content section styling */
+        #exodus-project {
+            position: relative; /* Needed for pseudo-element positioning */
+            background-image: url('cg cosmos.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: scroll; /* Changed to scroll for iframe compatibility */
+            min-height: 100vh; /* Ensure it covers at least the viewport height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 80px; /* Space for the header */
+        }
+
+        /* Pseudo-element for darkening and blurring overlay */
+        #exodus-project::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.5)); /* Darker gradient */
+            backdrop-filter: blur(8px); /* Increased blur for readability */
+            z-index: 0; /* Behind content */
+        }
+
+        #exodus-project > .container {
+            position: relative; /* Ensure content is above pseudo-element */
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <audio id="background-audio" loop autoplay>
+        <source src="Main_Menu.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="fixed inset-0 z-0 bg-cover bg-center" style="background-image: url('cg cosmos.webp');">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-90 backdrop-filter backdrop-blur-md"></div>
+    </div>
+
+    <header class="absolute w-full top-0 left-0 z-20 py-5 px-4 sm:px-6 lg:px-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="PNS_logo.png" alt="Project Nova Studios Logo" class="h-28 sm:h-36 w-auto object-contain">
+            <nav>
+                <ul class="flex space-x-4 sm:space-x-6">
+                    <li><a href="#exodus-project" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 text-lg font-medium">Home</a></li>
+                    <li class="relative dropdown">
+                        <a href="#" class="text-gray-300 hover:text-purple-400 transition-colors duration-300 text-lg font-medium cursor-pointer">
+                            Projects
+                            <svg class="inline-block w-4 h-4 ml-1 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a href="#exodus-project">Exodus</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="exodus-project">
+        <div class="container mx-auto max-w-6xl text-center">
+            <img src="title_logo.png" alt="EXODUS Title Logo" class="w-full max-w-3xl mx-auto mb-12 h-auto object-contain">
+
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                <div class="text-left">
+                    <p class="text-lg leading-relaxed mb-6 text-white">
+                        "EXODUS is a sci-fi fantasy furry visual novel (or FVN), as the first in the cinematic series. It takes inspiration from the popular graphic novel series, Amulet. Dive into a world of magical evolution and wondrous sci-fi inventions made real. A terraformed planet brings civilization to its knees, desperately waiting to crumble. Unravel the dark mysteries behind this new universe, and those that control it..."
+                    </p>
+                    <p class="text-lg leading-relaxed text-white">
+                        Prepare to make choices that will shape the destiny of this collapsing world and its inhabitants.
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+                        <a href="https://thebluefoxvn.itch.io/exodus-fvn" target="_blank" class="bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition-all duration-300 flex items-center gap-2 text-lg">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm3-3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM12 5c-3.87 0-7 3.13-7 7s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm-4.5 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm3-3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></svg>
+                            Game Page (Itch.io)
+                        </a>
+                        <a href="https://bsky.app/profile/thebluefoxvn.bsky.social" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition-all duration-300 flex items-center gap-2 text-lg">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm3-3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM12 5c-3.87 0-7 3.13-7 7s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm-4.5 9.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm3-3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></svg>
+                            Bluesky
+                        </a>
+                        <a href="https://x.com/EXODUSVN" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition-all duration-300 flex items-center gap-2 text-lg">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.007-.532A8.318 8.318 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012 10.702v.053a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.844"></path></svg>
+                            Xwitter
+                        </a>
+                    </div>
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300 border-4 border-purple-800">
+                    <img src="nobody_room.png" alt="Exodus Scene: Nobody's Room" class="w-full h-auto object-cover" onclick="openModal('nobody_room.png')">
+                </div>
+            </div>
+
+            <h3 class="text-3xl font-bold text-purple-400 mb-10 mt-16 border-b-2 border-purple-600 pb-3 inline-block">THE EXODUS TEAM</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <a href="https://x.com/thebluefoxvn" target="_blank" class="block bg-gray-950 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform duration-300 border border-gray-700 group">
+                    <img src="https://placehold.co/150x150/2d3748/a0aec0?text=THEBLUEFOXVN" alt="TheBlueFoxVN" class="w-36 h-36 rounded-full mx-auto mb-4 object-cover border-4 border-purple-500 shadow-lg group-hover:border-purple-400 transition-colors duration-300">
+                    <h4 class="text-xl font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors duration-300">TheBlueFoxVN</h4>
+                    <p class="text-gray-400 text-base">Project Lead</p>
+                </a>
+                <a href="https://www.furaffinity.net/user/artariem/" target="_blank" class="block bg-gray-950 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform duration-300 border border-gray-700 group">
+                    <img src="https://placehold.co/150x150/2d3748/a0aec0?text=REM" alt="REM" class="w-36 h-36 rounded-full mx-auto mb-4 object-cover border-4 border-purple-500 shadow-lg group-hover:border-purple-400 transition-colors duration-300">
+                    <h4 class="text-xl font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors duration-300">REM</h4>
+                    <p class="text-gray-400 text-base">Lead Artist</p>
+                </a>
+                <a href="https://www.youtube.com/@AM-Tracks/featured" target="_blank" class="block bg-gray-950 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform duration-300 border border-gray-700 group">
+                    <img src="https://placehold.co/150x150/2d3748/a0aec0?text=JOVE" alt="Jove" class="w-36 h-36 rounded-full mx-auto mb-4 object-cover border-4 border-purple-500 shadow-lg group-hover:border-purple-400 transition-colors duration-300">
+                    <h4 class="text-xl font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors duration-300">Jove</h4>
+                    <p class="text-gray-400 text-base">Music Comp</p>
+                </a>
+                <a href="https://x.com/ronixed" target="_blank" class="block bg-gray-950 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform duration-300 border border-gray-700 group">
+                    <img src="https://placehold.co/150x150/2d3748/a0aec0?text=RONXT" alt="Ronxt" class="w-36 h-36 rounded-full mx-auto mb-4 object-cover border-4 border-purple-500 shadow-lg group-hover:border-purple-400 transition-colors duration-300">
+                    <h4 class="text-xl font-semibold text-white mb-1">Ronxt</h4>
+                    <p class="text-gray-400 text-base">Supporting Artist</p>
+                </a>
+                <a href="https://x.com/Gumdrop_Studios" target="_blank" class="block bg-gray-950 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform duration-300 border border-gray-700 group">
+                    <img src="https://placehold.co/150x150/2d3748/a0aec0?text=GUMDROP" alt="Gumdrop Studios" class="w-36 h-36 rounded-full mx-auto mb-4 object-cover border-4 border-purple-500 shadow-lg group-hover:border-purple-400 transition-colors duration-300">
+                    <h4 class="text-xl font-semibold text-white mb-1">Gumdrop Studios</h4>
+                    <p class="text-gray-400 text-base">Animator/GUI</p>
+                </a>
+                <a href="https://bsky.app/profile/ryezun.bsky.social" target="_blank" class="block bg-gray-950 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform duration-300 border border-gray-700 group">
+                    <img src="https://placehold.co/150x150/2d3748/a0aec0?text=RYEZUN" alt="Ryezun" class="w-36 h-36 rounded-full mx-auto mb-4 object-cover border-4 border-purple-500 shadow-lg group-hover:border-purple-400 transition-colors duration-300">
+                    <h4 class="text-xl font-semibold text-white mb-1">Ryezun</h4>
+                    <p class="text-gray-400 text-base">Starring Mr. Nobody!</p>
+                </a>
+                <a href="https://x.com/Pascal_Pasukaru" target="_blank" class="block bg-gray-950 rounded-2xl shadow-xl p-6 transform hover:scale-105 transition-transform duration-300 border border-gray-700 group">
+                    <img src="https://placehold.co/150x150/2d3748/a0aec0?text=BWA" alt="Bwa" class="w-36 h-36 rounded-full mx-auto mb-4 object-cover border-4 border-purple-500 shadow-lg group-hover:border-purple-400 transition-colors duration-300">
+                    <h4 class="text-xl font-semibold text-white mb-1">Bwa</h4>
+                    <p class="text-gray-400 text-base">Audio Editing/Mastering</p>
+                </a>
+            </div>
+
+            <h3 class="text-3xl font-bold text-purple-400 mb-10 mt-16 border-b-2 border-purple-600 pb-3 inline-block">GALLERY</h3>
+            <div class="carousel-container">
+                <div class="carousel-images" id="gallery-carousel">
+                    <img src="cg little friend.webp" alt="Exodus CG: Little Friend" class="w-full h-auto object-cover" onclick="openModal('cg little friend.webp')">
+                    <img src="cg awakening.webp" alt="Exodus CG: Awakening" class="w-full h-auto object-cover" onclick="openModal('cg awakening.webp')">
+                    <img src="porch_n.png" alt="Exodus Scene: Night Porch" class="w-full h-auto object-cover" onclick="openModal('porch_n.png')">
+                    <img src="town_d.png" alt="Exodus Scene: Town Day" class="w-full h-auto object-cover" onclick="openModal('town_d.png')">
+                    <img src="living_room_d.png" alt="Exodus Scene: Living Room Day" class="w-full h-auto object-cover" onclick="openModal('living_room_d.png')">
+                </div>
+                <button class="carousel-button left" onclick="moveCarousel(-1)">❮</button>
+                <button class="carousel-button right" onclick="moveCarousel(1)">❯</button>
+            </div>
+
+        </div>
+    </section>
+
+    <footer id="footer" class="bg-gray-950 py-8 px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm border-t border-purple-900">
+        <div class="container mx-auto">
+            <p>© 2025 Project Nova Studios. All rights reserved.</p>
+            <p class="mt-2">Crafted with passion for immersive storytelling.</p>
+            </div>
+    </footer>
+
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        const carousel = document.getElementById('gallery-carousel');
+        const images = carousel.querySelectorAll('img');
+        let currentIndex = 0;
+
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        function moveCarousel(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) {
+                currentIndex = images.length - 1;
+            } else if (currentIndex >= images.length) {
+                currentIndex = 0;
+            }
+            updateCarousel();
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+
+        function openModal(imageSrc) {
+            modal.style.display = 'flex'; // Use flex to center content
+            modalImage.src = imageSrc;
+            // Add a class for subtle zoom effect
+            setTimeout(() => {
+                modalImage.classList.add('zoomed');
+            }, 50); // Small delay for transition to apply
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal() {
+            modalImage.classList.remove('zoomed');
+            // Delay closing modal to allow zoom-out transition
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Restore background scrolling
+            }, 300); // Match transition duration
+        }
+    </script>
+</body>
+</html>
